@@ -1,0 +1,46 @@
+CODE:
+close all;
+clear;
+clc;
+ 
+%% ENCODING OF LBC
+ 
+n = input('Enter the codeword length: ');
+k = input('Enter the message length: ');
+i = eye(k);
+p = input('Enter the parity matrix: ');
+ 
+% indicates Horizontal concatenation and concatenates 2 vectors, i and p into 1 along dimension2 hence 2
+g = cat(2,i,p)
+f = 0: 2^k-1;
+d = dec2bin(f);
+b=d*g;
+c=rem(b,2)
+ 
+ 
+%% DECODING of LBC
+ 
+q = p.'
+i1 = eye(n-k);
+h = cat(2,q,i1)
+ht = h.'
+r = input('Enter the received codeword:');
+s = r*ht
+l = rem(s,2)
+ 
+if l==0
+    disp('no error');
+    disp('NO need of correction');
+else
+    disp('Error detected');
+    e = eye(n);
+    e1 = e*ht;
+    s1 = rem(e1,2)
+ 
+    for j=1:n
+        if s==s1(j,:)
+            break;
+        end
+    end
+    corrected = xor(r,e(j,:))
+end

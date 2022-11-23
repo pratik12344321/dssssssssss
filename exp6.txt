@@ -1,0 +1,50 @@
+%exp6
+clc;
+clear;
+close all;
+ 
+N=input("Enter number of symbols = ");
+s = 1:N;
+p = input("Enter probabilities = ");
+ 
+[code avglen] = huffmandict(s, p, 2, 'min');
+c = code;
+ 
+for i = 1: length(c)
+    c{i, 2} = num2str(c{i, 2});
+end
+ 
+disp('The codewords are - ');
+c
+disp('Average length of codeword - ');
+avglen
+ 
+I = -log2(p);
+H = sum(I.*p);
+disp('Entropy of the source - ');
+H
+ 
+code_eff = H/avglen*100;
+code_eff
+ 
+for i= 1:length(c)
+    L(i) = sum(not(isspace(c{i, 2})));
+end
+L
+% Lbar = sum(L.*p);
+% Lbar
+variance = sum(p.*(L-avglen).^2);
+disp('Code variance');
+variance
+ 
+k = sum(2.^-L);
+k
+if k<=1
+    disp('Kraft inequality satified');
+else
+    disp('Kraft inequality not satified');
+end
+ 
+data = input('Enter data - ');
+enco = huffmanenco(data, code)
+deco = huffmandeco(enco, code)

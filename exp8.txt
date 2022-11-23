@@ -1,0 +1,65 @@
+close all;
+clear;
+clc;
+ 
+%% ENCODING OF CYCLIC CODE
+ 
+n=input('Enter codeword length - ');
+k=input('Enter value of message length - ');
+g=input('Enter generator coefficient - ')
+d=input('Enter message signal - ');
+y=[1];
+a=zeros(1,n-k);
+x=cat(2,y,a);
+ 
+% w = conv(u,v) returns the convolution of vectors u and v. If u and v are
+% vectors of polynomial coefficients, convolving them is equivalent to
+% multiplying the two polynomials.
+ 
+x1=conv(d,x)
+ 
+%[q,r] = deconv(u,v) deconvolves a vector v out of a vector u using long
+% division, and returns the quotient q and remainder r such that u =
+% conv(v,q) + r. If u and v are vectors of polynomial coefficients, then
+% deconvolving them is equivalent to dividing the polynomial represented by u
+% by the polynomial represented by v.
+ 
+p=deconv(x1,d)
+ 
+%Y = abs(X) returns the absolute value of each element in array X.
+ 
+r=abs(rem(x1,2))
+[q,d]=deconv(r,g)
+r1=abs(rem(d,2));
+codeword=xor(r,r1)
+ 
+ 
+%% DECODING OF CYCLIC CODE
+ 
+n=input('Enter codeword length - ');
+k=input('Enter value of message length - ');
+g=input('Enter generator coefficient - ');
+rec=input('Enter received signal - ');
+[q,r]=deconv(rec,g)
+syn=abs(rem(r,2));
+ 
+if syn==0
+    disp('no error');
+    disp('no need of correction');
+else
+    disp('error');
+    e=eye(n);
+    for i=1:n
+        [x,y(i,:)] = deconv(e(i,:),g)
+    end
+ 
+    z=abs(rem(y,2))
+    for i=1:n
+        if syn==z(i,:)
+            break;
+        end
+    end
+    corrected = xor(rec,e(i,:))
+end
+
+

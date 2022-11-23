@@ -1,0 +1,109 @@
+%exp 5
+% Part 1 
+% Notes: 
+% 1) Uncertainty is directly proportional to information
+% 2) We try to model the channel using mathematical probability
+ 
+clc;
+clear;
+close all;
+ 
+%% Part 1
+ 
+% N=input("Enter Number of Bits = ");
+% H=0;
+% for i=1:N
+%     x(i)=input("Enter Probability of " + num2str(i)+ " = " );
+%     H=H-log2(x(i))*x(i);
+% end
+% 
+% disp("Average Info per msg is " + H);
+% r=input("Enter Average Rate ");
+% ans=r*H;
+% disp(ans);
+ 
+%% Part 2
+ 
+% N= input("Enter a String = ",'s');
+% Nlen=length(N);
+% UN= unique(N);
+% UNlen=length(UN);
+% H=0;
+% for i=1:UNlen
+%    a(i)=0;
+%    for j=1:Nlen
+%        if UN(i)== N(j)
+%            a(i)=a(i)+1;
+%        end
+%    end
+%    a(i)=a(i)/Nlen;
+%    disp(UN(i)+" "+a(i));
+%    H=H-log2(a(i))*a(i);
+% end
+ 
+%% Part 3
+N=input("Enter Number of Bits = ");
+HX=0;
+for i=1:N
+    x(i)=input("Enter Probability of " + num2str(i)+ " = " );
+    HX=HX-log2(x(i))*x(i);
+end
+ 
+for i=1:N
+    for j=1:N
+        if i==j
+            px(i,j)=x(i);
+        end
+        pyx(i,j)=input("Enter Probability of " + num2str(j)+ "/" + num2str(i) + " = " ); 
+    end
+end
+ 
+py=px*pyx;
+ 
+disp("P(X) =");
+disp(px);
+disp("");
+disp("P(X,Y) = ");
+disp(py);
+disp("");
+disp("P(Y/X) = ");
+disp(pyx);
+disp("");
+ 
+HXY=0;
+HY=0;
+    
+y=zeros(N);
+for i=1:N
+    for j=1:N
+        HXY=HXY-log2(py(i,j))*py(i,j);
+        y(i)=y(i)+py(i,j);
+    end
+    HY=HY-log2(y(i))*y(i);
+end
+ 
+ 
+ 
+disp("H(X) =");
+disp(HX);
+disp("");
+disp("H(Y) = ");
+disp(HY);
+disp("");
+disp("H(Y/X) = ");
+Hyx=HXY-HX;
+disp(Hyx);
+disp("");
+disp("H(X/Y) = ");
+Hxy=HXY-HY;
+disp(Hxy);
+disp("");
+disp("H(X,Y) = ");
+disp(HXY);
+disp("");
+disp("I(X;Y) = ");
+IXY=HX+HY-HXY;
+disp(IXY);
+%//////////////////////////////////////////////////////////
+
+
